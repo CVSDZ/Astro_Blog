@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, summary, date, tags, week } = post.data;
+const dateText = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+---
+
+<article class="post-card">
+  <h2><a href={`/posts/${post.id}/`}>{title}</a></h2>
+  <p class="post-meta">第 {week} 周 · {dateText}</p>
+  <p class="post-summary">{summary}</p>
+  {
+    tags.length > 0 && (
+      <ul class="tag-list">
+        {tags.map((tag) => (
+          <li>{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>

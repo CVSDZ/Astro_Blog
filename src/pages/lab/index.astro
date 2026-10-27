@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const items = (await getCollection('lab')).sort(
+  (a, b) => a.data.week - b.data.week
+);
+---
+
+<BaseLayout title="Lab 时间轴" description="每周动手产出、指标与踩坑记录">
+  <section style="margin-bottom:32px">
+    <h1 style="font-size:26px;margin:0 0 8px">Lab 时间轴</h1>
+    <p class="post-meta" style="margin:0">
+      按周记录动手产出,关联 llm-lab 代码目录。
+    </p>
+  </section>
+
+  {
+    items.length === 0 ? (
+      <p class="post-meta">还没有 Lab 记录。</p>
+    ) : (
+      <ul class="post-list">
+        {items.map((item) => (
+          <li>
+            <article class="post-card">
+              <h2>
+                第 {item.data.week} 周 · {item.data.title}
+                {item.data.done ? ' ✓' : ''}
+              </h2>
+              <p class="post-meta">代码目录:{item.data.repoDir}</p>
+              {Object.keys(item.data.metrics).length > 0 && (
+                <ul class="tag-list">
+                  {Object.entries(item.data.metrics).map(([key, value]) => (
+                    <li>
+                      {key}: {value}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {item.data.pitfalls.length > 0 && (
+                <div class="prose" style="margin-top:12px">
+                  <p class="post-meta" style="margin:0 0 4px">
+                    踩坑记录:
+                  </p>
+                  <ul>
+                    {item.data.pitfalls.map((pitfall) => (
+                      <li>{pitfall}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </article>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

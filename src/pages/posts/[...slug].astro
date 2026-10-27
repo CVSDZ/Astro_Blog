@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Giscus from '../../components/Giscus.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, date, tags, week, summary, milestone } = post.data;
+
+const dateText = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={summary}>
+  <article>
+    <header class="article-header">
+      <h1>{title}</h1>
+      <p class="post-meta" style="margin:0 0 8px">
+        第 {week} 周 · {dateText}{milestone ? ' · ★ 里程碑' : ''}
+      </p>
+      {
+        tags.length > 0 && (
+          <ul class="tag-list" style="margin-top:0">
+            {tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <Giscus />
+  </article>
+</BaseLayout>

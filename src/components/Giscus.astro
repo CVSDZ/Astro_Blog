@@ -1,0 +1,68 @@
+---
+interface Props {
+  repo?: string;
+  repoId?: string;
+  category?: string;
+  categoryId?: string;
+}
+
+const {
+  repo = 'your-github-name/blog-comments',
+  repoId = 'R_kgDOxxxxxxx',
+  category = 'Announcements',
+  categoryId = 'DIC_kwDOxxxxxxxx',
+} = Astro.props;
+---
+
+<section class="comments" style="margin-top:48px">
+  <h2
+    style="font-size:18px;border-bottom:1px solid var(--border);padding-bottom:6px"
+  >
+    评论
+  </h2>
+  <p class="post-meta">
+    使用 Giscus 驱动。到 <a
+      href="https://giscus.app"
+      target="_blank"
+      rel="noopener">giscus.app</a
+    > 生成配置后,替换本组件中的 repo / repoId / categoryId 即可启用。
+  </p>
+  <div
+    class="giscus"
+    data-repo={repo}
+    data-repo-id={repoId}
+    data-category={category}
+    data-category-id={categoryId}
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+  >
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const container = document.querySelector('.giscus');
+    if (!container) return;
+
+    const repo = container.getAttribute('data-repo');
+    // 未配置真实仓库时不加载,避免线上报错
+    if (!repo || repo.includes('your-github-name')) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    for (const attr of container.attributes) {
+      if (attr.name.startsWith('data-')) {
+        script.setAttribute(attr.name, attr.value);
+      }
+    }
+    script.setAttribute('crossorigin', 'anonymous');
+    script.loading = 'lazy';
+    script.async = true;
+    container.appendChild(script);
+  })();
+</script>
