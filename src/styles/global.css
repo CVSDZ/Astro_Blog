@@ -112,6 +112,19 @@ main {
   padding: 24px 0;
   text-align: center;
 }
+.site-footer p {
+  margin: 0;
+}
+.site-footer-icp {
+  margin-top: 6px;
+}
+.site-footer-icp a {
+  color: var(--fg-muted);
+}
+.site-footer-icp a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
 
 /* ---------- 文章列表 ---------- */
 .post-list {

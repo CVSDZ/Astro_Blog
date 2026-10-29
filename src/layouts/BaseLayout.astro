@@ -7,12 +7,15 @@ interface Props {
   description?: string;
 }
 
-const siteTitle = 'AI 学习博客';
+const siteTitle = '软件开发记录博客';
 const {
   title = siteTitle,
   description = '大模型应用开发 / Agent 方向的学习记录与动手实践',
 } = Astro.props;
 const fullTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
+
+const icpNumber = '鄂ICP备2026062489号-1';
+const icpUrl = 'https://beian.miit.gov.cn/';
 ---
 
 <!doctype html>
@@ -49,6 +52,11 @@ const fullTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
     <footer class="site-footer">
       <div class="container">
         <p>© {new Date().getFullYear()} · 用 Astro 构建 · 内容页零 JS</p>
+        <p class="site-footer-icp">
+          <a href={icpUrl} target="_blank" rel="noopener noreferrer">
+            {icpNumber}
+          </a>
+        </p>
       </div>
     </footer>
   </body>
